@@ -31,7 +31,7 @@ odb = session.odbs['auto_inp.odb']
 session.writeFieldReport(
     fileName='./STRESS+MISES.rpt', append=ON, 
     sortItem='Element Label', odb=odb, step=0, frame=1, 
-    outputPosition=ELEMENT_NODAL, variable=(('S', INTEGRATION_POINT, ((
+    outputPosition=INTEGRATION_POINT, variable=(('S', INTEGRATION_POINT, ((
     INVARIANT, 'Mises'), (COMPONENT, 'S11'),(COMPONENT, 'S12'), (COMPONENT, 'S22') )), ))
 odb = session.odbs['auto_inp.odb']
 session.writeFieldReport(

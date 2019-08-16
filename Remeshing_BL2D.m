@@ -1,6 +1,5 @@
 close all;
 %% User input 
-
 list = {'Beam','Shell'};
 [truss,tf] = listdlg('SelectionMode','single','ListString',list);
 TF = isempty(truss);
@@ -25,18 +24,18 @@ pv=[-90 -15;-60 -15;60 -15;90 -15;90 15;30 15;-30 15;-90 15;-90 -15];
 minix=min(pv(:,1));maxix=max(pv(:,1));miniy=min(pv(:,2));maxiy=max(pv(:,2));
 
 %% User INPUT
-sigma_user= 10;                                                             % sigma_min given by user
-minimum_size=2;                                                           % h_min
-% dos(['echo hmin   ',int2str(minimum_size),' >> bl2d.env']);
+sigma_user= 20;                                                             % sigma_min given by user
+minimum_size=2;                                                             % h_min
+dos(['echo hmin   ',num2str(minimum_size),' >> bl2d.env']);
+% dos(['echo hmax   ',num2str(40,6),' >> bl2d.env']);
 %% running BL2D for mesh generation
-for i=0:5
+for i=0:10
 
     if i==0
         dos('compile.bat')                                                      % Initial meshing .bat file 
     else
-        
         dos(['echo adapt   ',int2str(i),' >> bl2d.env']);                       % adaptation file .env 
-        dos('compil_remaillage.bat')                                            % Remeshing .bat file 
+        dos('compil_remaillage.bat');                                           % Remeshing .bat file 
     end
     %% visualization of mesh using Medit
     visualization (i);
@@ -68,10 +67,10 @@ for i=0:5
     %% shell or beam calculation
     if truss==1
         % Beam
-        Write_INP_Function([[1:size(p,1)]' p], [[1:size(elements,1)]' elements], [indxy ones(size(indxy,1),2);indy zeros(size(indy,1),1) ones(size(indy,1),1)], [], [force/size(indcload,1);indcload], [], [], [E,poisson], [.4,thickness_truss])
+        Write_INP_Function([[1:size(p,1)]' p], [[1:size(elements,1)]' elements], [indxy ones(size(indxy,1),2);indy zeros(size(indy,1),1) ones(size(indy,1),1)], [], [force/size(indcload,1);indcload], [], [], [E,poisson], [.4,thickness_truss]);
     elseif truss==2
         % Shell
-        Write_INP_Function_shell([[1:size(p,1)]' p], [[1:size(t,1)]' t], [indxy ones(size(indxy,1),2);indy zeros(size(indy,1),1) ones(size(indy,1),1)], [], [force/size(indcload,1);indcload], [], [], [E,poisson],thickness_shell)
+        Write_INP_Function_shell([[1:size(p,1)]' p], [[1:size(t,1)]' t], [indxy ones(size(indxy,1),2);indy zeros(size(indy,1),1) ones(size(indy,1),1)], [], [force/size(indcload,1);indcload], [], [], [E,poisson],thickness_shell);
     end
     fopen('STRESS+MISES.rpt','w');
     fopen('DEPLACEMENT.rpt','w');
